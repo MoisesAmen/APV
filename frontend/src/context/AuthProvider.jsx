@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext  } from 'react'
 import clienteAxios from '../config/axios'
+import  setPacientes from '../context/PacientesProvider'
 
 const AuthContext = createContext()
 const AuthProvider = ({children}) => {
@@ -38,6 +39,7 @@ const AuthProvider = ({children}) => {
     const cerrarSesion = () => {
         localStorage.removeItem('token')
         setAuth({})
+        setPacientes([]); // Limpia el estado de pacientes
     }
 
     const actualizarPerfil = async datos => {

@@ -1,5 +1,6 @@
 import {createContext, useState, useEffect} from 'react'
 import clienteAxios from '../config/axios'
+import useAuth from '../hooks/useAuth'; // Importa useAuth
 
 const PacientesContext = createContext()
 
@@ -8,8 +9,11 @@ export const PacientesProvider = ({children}) => {
     const [pacientes, setPacientes] = useState([])
     const [paciente, setPaciente] = useState({})
 
+    const { auth } = useAuth(); // Accede a auth
+
     useEffect(() => {
         const obtenerPacientes = async () => {
+            if(!auth?._id) return;  // No intentar obtener pacientes si no hay un veterinario autenticado
 
             try {
                 const token = localStorage.getItem('token')
@@ -30,7 +34,7 @@ export const PacientesProvider = ({children}) => {
             }
         }
         obtenerPacientes()
-    }, [])
+    }, [auth]);  // Dependencia del auth, así se ejecuta cada vez que cambia
 
 
     const guardarPaciente = async (paciente) => {
